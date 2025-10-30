@@ -3,7 +3,7 @@ import './custom.css'
 
 export default {
   ...DefaultTheme,
-  enhanceApp() {
+  enhanceApp({ router }) {
     if (typeof window === 'undefined') return
 
     // 作为首页全屏固定背景的视频
@@ -65,7 +65,7 @@ export default {
       return true
     }
 
-    // 尝试插入并在后续路由变更时维持状态
+    // 初始阶段重复尝试，确保首屏渲染完成后挂载
     let attempts = 0
     const maxAttempts = 20
     const interval = setInterval(() => {
@@ -73,5 +73,19 @@ export default {
       ensureBackgroundVideo()
       if (attempts >= maxAttempts) clearInterval(interval)
     }, 300)
+
+    // 监听路由变化，仅首页显示背景视频，其它页面移除
+    if (router && typeof router.onChanged !== 'undefined') {
+      const prev = router.onChanged
+      router.onChanged = (...args) => {
+        try { ensureBackgroundVideo() } catch {}
+        if (typeof prev === 'function') prev(...args)
+      }
+    } else {
+      // 兜底：观察主容器 DOM 变化，触发检查
+      const main = document.querySelector('main') || document.body
+      const observer = new MutationObserver(() => ensureBackgroundVideo())
+      observer.observe(main, { childList: true, subtree: true })
+    }
   }
 }
