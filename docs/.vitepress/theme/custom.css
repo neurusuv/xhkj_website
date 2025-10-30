@@ -62,6 +62,24 @@ video.vp-hero-video-el {
   z-index: 1 !important;
 }
 
+/* 首页全屏背景视频容器（不阻塞交互） */
+#bg-video-container {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  background: #000 !important;
+}
+
+#bg-video-container .bg-video-el {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  pointer-events: none !important;
+}
+
 /* 导航栏 Logo 尺寸加倍（保持原始长宽比） */
 .VPNavBar .logo,
 .VPNavBarTitle .logo {

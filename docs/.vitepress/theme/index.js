@@ -6,94 +6,72 @@ export default {
   enhanceApp() {
     if (typeof window === 'undefined') return
 
-    // 移除任何遗留的调试面板，保持页面干净
-    const oldDebug = document.getElementById('video-debug')
-    if (oldDebug) oldDebug.remove()
+    // 作为首页全屏固定背景的视频
+    const base = (import.meta && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
+    const srcPath = base.endsWith('/') ? `${base}hero-video.mp4` : `${base}/hero-video.mp4`
 
-    const tryInsertBottomVideo = () => {
-      // 将视频容器插入到首页功能区（VPHomeFeatures）之后
-      let container = document.getElementById('bottom-video-container')
-      if (!container) {
-        const features = document.querySelector('.VPHomeFeatures')
-        const hero = document.querySelector('.VPHomeHero')
-        const parent = document.querySelector('main') || document.body
-        
-        container = document.createElement('div')
-        container.id = 'bottom-video-container'
-        container.style.cssText = `
-          width: 100%;
-          min-height: 320px;
-          position: relative;
-          margin: 32px 0 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: #111827;
-          border-radius: 12px;
-          overflow: hidden;
-        `
-        if (features) {
-          features.insertAdjacentElement('afterend', container)
-        } else if (hero) {
-          hero.insertAdjacentElement('afterend', container)
-        } else {
-          parent.appendChild(container)
-        }
+    const ensureBackgroundVideo = () => {
+      const isHome = !!document.querySelector('.VPHomeHero')
+      const existing = document.getElementById('bg-video-container')
+
+      // 非首页时移除背景视频
+      if (!isHome) {
+        if (existing) existing.remove()
+        return false
       }
 
-      if (container.querySelector('video.bottom-video-el')) {
-        return true
-      }
+      if (existing) return true
+
+      const container = document.createElement('div')
+      container.id = 'bg-video-container'
+      container.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: #000;
+      `
 
       const video = document.createElement('video')
-      video.className = 'bottom-video-el'
+      video.className = 'bg-video-el'
       video.autoplay = true
       video.loop = true
       video.muted = true
       video.playsInline = true
-      video.controls = true
+      video.controls = false
       video.preload = 'metadata'
-      
       video.style.cssText = `
-        width: 86%;
-        max-width: 900px;
-        height: auto;
-        border-radius: 12px;
-        box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
         display: block;
       `
 
       const source = document.createElement('source')
-      // 使用构建 base 前缀，确保在 GitHub Pages 项目路径下可访问
-      const base = (import.meta && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
-      const srcPath = base.endsWith('/') ? `${base}hero-video.mp4` : `${base}/hero-video.mp4`
       source.src = srcPath
       source.type = 'video/mp4'
       video.appendChild(source)
-      
-      video.addEventListener('error', () => {
-        const tip = document.createElement('div')
-        tip.textContent = `视频加载失败：${srcPath}`
-        tip.style.cssText = 'color:#fff;background:#b00020;padding:8px 12px;border-radius:8px;margin-top:12px;'
-        container.appendChild(tip)
-      })
+
       video.addEventListener('loadeddata', () => {
         const p = video.play()
         if (p && typeof p.catch === 'function') p.catch(() => {})
       })
-      
+
       container.appendChild(video)
+      document.body.appendChild(container)
       return true
     }
 
-    // 尝试多次插入，兼容异步渲染
+    // 尝试插入并在后续路由变更时维持状态
     let attempts = 0
-    const maxAttempts = 12
+    const maxAttempts = 20
     const interval = setInterval(() => {
       attempts++
-      if (tryInsertBottomVideo() || attempts >= maxAttempts) {
-        clearInterval(interval)
-      }
+      ensureBackgroundVideo()
+      if (attempts >= maxAttempts) clearInterval(interval)
     }, 300)
   }
 }
