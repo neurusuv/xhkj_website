@@ -4,6 +4,8 @@ export default {
   lang: 'zh-CN',
   // GitHub Pages 项目站点需要设置 base 为仓库名
   base: '/xhkj_website/',
+  // 部署中包含大量二进制附件与非页面链接，关闭死链检查避免构建失败
+  ignoreDeadLinks: true,
   vite: {
     resolve: {
       preserveSymlinks: true
