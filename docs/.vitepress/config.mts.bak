@@ -1,0 +1,34 @@
+import { defineConfig } from 'vitepress'
+
+export default defineConfig({
+  title: '重庆信衡科技',
+  description: '视觉感知引领者，智能系统赋能者',
+  lang: 'zh-CN',
+  themeConfig: {
+    nav: [
+      { text: '首页', link: '/' },
+      { text: '关于', link: '/about' },
+      { text: '产品', link: '/products' },
+      { text: '技术与质量', link: '/technology' },
+      { text: '应用领域', link: '/applications' },
+      { text: '资料库', link: '/library' },
+      { text: '联系我们', link: '/contact' }
+    ],
+    sidebar: {
+      '/': [
+        {
+          text: '概览',
+          items: [
+            { text: '首页', link: '/' },
+            { text: '关于信衡', link: '/about' },
+            { text: '产品与解决方案', link: '/products' },
+            { text: '技术与质量保障', link: '/technology' },
+            { text: '应用领域', link: '/applications' },
+            { text: '资料库', link: '/library' },
+            { text: '联系我们', link: '/contact' }
+          ]
+        }
+      ]
+    }
+  }
+})

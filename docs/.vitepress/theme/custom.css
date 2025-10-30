@@ -1,0 +1,76 @@
+/**
+ * VitePress 官方推荐的主题颜色自定义方式
+ * 使用 CSS 变量来统一调整主题颜色为 #9326FF
+ */
+
+:root {
+  /* 品牌主色调 - VitePress 官方变量 */
+  --vp-c-brand-1: #9326FF;
+  --vp-c-brand-2: #9326FF;
+  --vp-c-brand-3: #9326FF;
+  --vp-c-brand-soft: rgba(147, 38, 255, 0.14);
+  
+  /* 品牌按钮颜色 - VitePress 官方变量 */
+  --vp-button-brand-border: #9326FF;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-bg: #9326FF;
+  --vp-button-brand-hover-border: #7a1fd9;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-hover-bg: #7a1fd9;
+  --vp-button-brand-active-border: #6b1bc2;
+  --vp-button-brand-active-text: #ffffff;
+  --vp-button-brand-active-bg: #6b1bc2;
+  
+  /* 导航栏 Logo 高度（加倍） */
+  --vp-nav-logo-height: 48px;
+}
+
+/* 暗色主题适配 */
+.dark {
+  --vp-c-brand-1: #9326FF;
+  --vp-c-brand-2: #9326FF;
+  --vp-c-brand-3: #9326FF;
+  --vp-c-brand-soft: rgba(147, 38, 255, 0.16);
+  /* 暗色模式同样加倍 Logo 尺寸 */
+  --vp-nav-logo-height: 48px;
+}
+
+/* 保留原有的自定义样式 */
+.VPHomeHero .image .image-container {
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.VPHomeHero .text {
+  font-size: 48px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* 视频元素样式 */
+video.vp-hero-video-el {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  border-radius: 50% !important;
+  z-index: 1 !important;
+}
+
+/* 导航栏 Logo 尺寸加倍（保持原始长宽比） */
+.VPNavBar .logo,
+.VPNavBarTitle .logo {
+  height: var(--vp-nav-logo-height) !important;
+}
+.VPNavBar .logo img,
+.VPNavBarTitle .logo img {
+  height: var(--vp-nav-logo-height) !important;
+  width: auto !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+}
