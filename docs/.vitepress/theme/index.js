@@ -64,13 +64,16 @@ export default {
       `
 
       const source = document.createElement('source')
-      source.src = '/hero-video.mp4'
+      // 使用构建 base 前缀，确保在 GitHub Pages 项目路径下可访问
+      const base = (import.meta && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
+      const srcPath = base.endsWith('/') ? `${base}hero-video.mp4` : `${base}/hero-video.mp4`
+      source.src = srcPath
       source.type = 'video/mp4'
       video.appendChild(source)
       
       video.addEventListener('error', () => {
         const tip = document.createElement('div')
-        tip.textContent = '视频加载失败：/hero-video.mp4'
+        tip.textContent = `视频加载失败：${srcPath}`
         tip.style.cssText = 'color:#fff;background:#b00020;padding:8px 12px;border-radius:8px;margin-top:12px;'
         container.appendChild(tip)
       })
