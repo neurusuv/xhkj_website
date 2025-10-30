@@ -2,6 +2,8 @@ export default {
   title: '重庆信衡科技',
   description: '视觉感知引领者，智能系统赋能者',
   lang: 'zh-CN',
+  // GitHub Pages 项目站点需要设置 base 为仓库名
+  base: '/xhkj_website/',
   vite: {
     resolve: {
       preserveSymlinks: true
